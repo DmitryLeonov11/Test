@@ -15,9 +15,13 @@ namespace Test.Controllers
         private DataContext db = new DataContext();
 
         // GET: ProductModels
-        public ActionResult Index()
+        public ActionResult Index(string searchString)
         {
             var products = db.ProductModels.Include(p => p.Category);
+            if(!String.IsNullOrEmpty(searchString))
+            {
+                products = products.Where(p => p.Name.ToLower().Contains(searchString.ToLower()));
+            }
             return View(products.ToList());
         }
 
@@ -29,6 +33,7 @@ namespace Test.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             ProductModel productModel = db.ProductModels.Find(id);
+            productModel.Category = db.CategoryModels.Where(_ => _.Id == productModel.CategoryId).FirstOrDefault();
             if (productModel == null)
             {
                 return HttpNotFound();
@@ -102,6 +107,7 @@ namespace Test.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             ProductModel productModel = db.ProductModels.Find(id);
+            productModel.Category = db.CategoryModels.Where(_ => _.Id == productModel.CategoryId).FirstOrDefault();
             if (productModel == null)
             {
                 return HttpNotFound();

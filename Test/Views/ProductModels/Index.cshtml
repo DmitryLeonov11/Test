@@ -1,11 +1,16 @@
 ﻿@model IEnumerable<Test.Models.ProductModel>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Products";
 }
 
-<h2>Index</h2>
-
+<h2>Products</h2>
+<form asp-controller="ProductModels" asp-action="Index">
+    <p>
+        Title: <input type="text" name="SearchString">
+        <input type="submit" value="Search" />
+    </p>
+</form>
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
@@ -41,8 +46,12 @@
         @Html.DisplayFor(modelItem => item.Description)
     </td>
     <td>
-        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+        <a href='@Url.Action("Details", "ProductModels", new { id = item.Id })' title="Details">
+            <img src='@Url.Content("~/Content/Images/info.png")' />
+        </a>
+        <a href='@Url.Action("Delete", "ProductModels", new { id = item.Id })' title="Delete">
+            <img src='@Url.Content("~/Content/Images/delete.png")' />
+        </a>
     </td>
 </tr>
 }
